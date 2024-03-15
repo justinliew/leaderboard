@@ -35,8 +35,9 @@ pub fn add_or_update_listing(id: &str, name: &str, score: i32) -> Result<Vec<Lis
 	match get_raw::<ListingEntry>("lblistings") {
 		Ok(mut listings) => {
 			match listings.iter_mut().find(|l| l.id == id) {
-				Some(mut l) => {
+				Some(l) => {
 					l.score = score;
+					l.name = name.to_string();
 				},
 				_ => {
 					let listing = ListingEntry::new(id.to_string(), name.to_string() ,score);
