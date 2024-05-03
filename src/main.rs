@@ -8,9 +8,9 @@ use num;
 
 mod listings;
 mod sessions;
-mod valkeyrie;
+mod cache;
 
-use crate::valkeyrie::get_raw;
+use crate::cache::get_raw;
 use crate::sessions::{add_session,new_session,verify_session,write_sessions};
 
 fn header_val(header: Option<&HeaderValue>) -> &str {
@@ -32,6 +32,7 @@ fn main(mut req: Request) -> Result<Response, Error> {
     // Make any desired changes to the client request.
 //	req.set_header("Access-Control-Allow-Origin", HeaderValue::from_static("*"));
 
+	println!("Got {} {}", req.get_method(), req.get_path());
 	if req.get_method() == Method::OPTIONS {
         return Ok(Response::from_status(StatusCode::OK)
 			.with_header("Access-Control-Allow-Origin","*")
@@ -89,7 +90,7 @@ fn main(mut req: Request) -> Result<Response, Error> {
 			let name = header_val(req.get_header("name"));
 			if let Ok(score) = header_val(req.get_header("score")).parse::<i32>() {
 				if !verify_session(id) {
-					return Ok(Response::from_status(StatusCode::NOT_FOUND));
+					return Ok(Response::from_status(StatusCode::NOT_FOUND).with_header("Access-Control-Allow-Origin", "*"))
 				}
 
 				match add_or_update_listing(id,name,score) {

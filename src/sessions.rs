@@ -3,7 +3,7 @@ use fastly::{Error,Response};
 use uuid::Uuid;
 use std::time::{Duration,SystemTime};
 
-use crate::valkeyrie::{get_raw,write_raw};
+use crate::cache::{get_raw,write_raw};
 
 struct Session {
 	id: String,

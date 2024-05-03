@@ -5,7 +5,7 @@ use std::time::{Duration,SystemTime};
 use serde::{Deserialize,Serialize};
 use serde::de::DeserializeOwned;
 
-use crate::valkeyrie::{get_raw,write_raw};
+use crate::cache::{get_raw,write_raw};
 
 #[derive(Serialize,Deserialize,Debug,PartialOrd,PartialEq,Clone)]
 pub struct ListingEntry {
@@ -28,10 +28,12 @@ impl ListingEntry {
 }
 
 pub fn write_listings(listings: Vec<ListingEntry>) -> Result<(),Error> {
+	// TODO write listings
 	write_raw("lblistings", listings)
 }
 
 pub fn add_or_update_listing(id: &str, name: &str, score: i32) -> Result<Vec<ListingEntry>,Error> {
+	// TODO get listings
 	match get_raw::<ListingEntry>("lblistings") {
 		Ok(mut listings) => {
 			match listings.iter_mut().find(|l| l.id == id) {
@@ -58,6 +60,7 @@ pub fn add_or_update_listing(id: &str, name: &str, score: i32) -> Result<Vec<Lis
 }
 
 pub fn get_index_for_score(score: i32) -> Option<(usize, usize)> {
+	// TODO get listings
 	match get_raw::<ListingEntry>("lblistings") {
 		Ok(mut listings) => {
 			for (index,listing) in listings.iter().enumerate() {
@@ -75,6 +78,7 @@ pub fn get_index_for_score(score: i32) -> Option<(usize, usize)> {
 }
 
 pub fn get_listings(s: usize, num: usize) -> Result<Vec<ListingEntry>,Error> {
+	// TODO get listings
 	match get_raw::<ListingEntry>("lblistings") {
 		Ok(mut listings) => {
 			if num == 0 {
